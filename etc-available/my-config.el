@@ -139,8 +139,6 @@
       (message filename)))))
 
 
-(setq locate-make-command-line
-      (lambda (ss) (list locate-command "--database" "/home/steven/iress/locate.db" "--basename" "--regexp" ss)))
 (defun check-debug (&optional buffer)
   (interactive)
   (if buffer (set-buffer buffer) (set-buffer (current-buffer)))
