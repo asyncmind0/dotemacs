@@ -428,3 +428,10 @@ buffer is not visiting a file."
     (flycheck-mode -1)))
 
 (add-hook 'emacs-lisp-mode-hook #'my-disable-flycheck-mode-in-scratch-buffer)
+(autoload 'html-fold-mode "html-fold" "Minor mode for hiding and revealing elements." t)
+(add-hook 'html-mode-hook
+ (lambda ()
+ (define-key html-mode-map (kbd "<M-left>") 'sgml-skip-tag-backward)
+ (define-key html-mode-map (kbd "<M-right>") 'sgml-skip-tag-forward)
+ )
+)
