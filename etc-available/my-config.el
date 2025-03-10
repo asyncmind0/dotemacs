@@ -1,4 +1,10 @@
 ;; My miscellaneous functions
+(req-package chatgpt-shell
+  :ensure t
+  :init (setq
+  chatgpt-shell-openai-key
+   (password-store-get "emacs/openai-api-key"))
+   )
 (req-package which-key
   :init(progn
          (which-key-mode)))
