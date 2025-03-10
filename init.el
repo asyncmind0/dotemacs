@@ -46,8 +46,8 @@
  '(background-mode dark)
  '(blacken-line-length 80)
  '(bookmark-default-file (expand-file-name "~/.emacsbookmarks"))
- '(bookmark-version-control 'nospecial)
  '(bookmark-save-flag 1)
+ '(bookmark-version-control 'nospecial)
  '(browse-url-browser-function 'browse-url-default-browser)
  '(col-highlight-overlay-priority -300)
  '(col-highlight-vline-face-flag nil)
@@ -117,7 +117,7 @@
  '(flycheck-yaml-jsyaml-executable "/home/steven/.npm/bin/js-yaml")
  '(foreground-color nil)
  '(fortune-dir "/usr/share/fortune/")
- '(gmm-tool-bar-style 'retro)
+ '(gmm-tool-bar-style 'retro t)
  '(grep-command "ack --with-filename --nogroup --all")
  '(grep-highlight-matches 'auto)
  '(gud-pdb-command-name "python -d")
@@ -198,6 +198,7 @@
    '("~/org/streethawk/riak.org" "~/org/streethawk/davidl.org" "~/org/streethawk/daily.org" "~/org/streethawk/meetings.org" "~/org/streethawk/idea_driven.org" "~/org/streethawk/ethan.org" "~/org/streethawk/streethawk.org" "~/org/streethawk/steven.org" "~/org/streethawk/beamer_test.org" "~/org/streethawk/steven_personal.org" "~/org/streethawk/recruitment.org" "~/org/streethawk/nick.org" "~/org/code.org" "~/org/gcal_personal.org" "~/org/gcal_work.org" "~/org/grain_brain.org" "~/org/salt_meetup.org" "~/org/goals_2016.org" "~/org/meetings.org" "~/org/ijournal.org" "~/org/gp.org" "~/org/Getting Started with Orgzly.org" "~/org/time_management.org" "~/org/archived/osc.org" "~/org/archived/iress_standup.org" "~/org/archived/ips_handover.org" "~/org/archived/driving.org" "~/org/archived/interview_questions.org" "~/org/archived/iress.org" "~/org/archived/sydjs.org" "~/org/archived/coverletter.org" "~/org/archived/todo_done.org" "~/org/philosophy.org" "~/org/docker_meetup.org" "~/org/emacstips.org" "~/org/meetup/android.org" "~/org/meetup/salt_meetup.org" "~/org/meetup/docker_meetup.org" "~/org/meetup/sypy.org" "~/org/meetup/sydjs.org" "~/org/meetup/DTBR.org" "~/org/driving.org" "~/org/travel.org" "~/org/todo.org" "~/org/ideas.org" "~/org/sypy.org" "~/org/interview_questions.org" "~/org/refile.org" "~/org/property.org" "~/org/notes.org" "~/org/books/slight_edge.org" "~/org/books/babyorbust.org" "~/org/books/9success.org" "~/org/books/books.org" "~/org/books/adaptive_leadership.org" "~/org/goals_2019.org" "~/org/devops.org" "~/org/DTBR.org" "~/org/supplements.org" "~/org/business.org" "/home/steven/org/streethawk/beamer_test.org" "/home/steven/org/streethawk/daily.org" "/home/steven/org/streethawk/davidl.org" "/home/steven/org/streethawk/ethan.org" "/home/steven/org/streethawk/idea_driven.org" "/home/steven/org/streethawk/meetings.org" "/home/steven/org/streethawk/nick.org" "/home/steven/org/streethawk/recruitment.org" "/home/steven/org/streethawk/riak.org" "/home/steven/org/streethawk/steven.org" "/home/steven/org/streethawk/steven_personal.org" "/home/steven/org/streethawk/streethawk.org"))
  '(org-agenda-repeating-timestamp-show-all nil)
  '(org-agenda-skip-scheduled-if-deadline-is-shown 'repeated-after-deadline)
+ '(org-html-checkbox-type 'html t)
  '(package-selected-packages
    '(org-preview-html helm-org-rifle blacken robot-mode json-mode evil-surround wrap-region poetry undo-fu sauron org-jira highlight-indent-guides pkgbuild-mode kubernetes kubernetes-evil kubernetes-helm ripgrep yafolding vimish-fold docker-compose-mode dockerfile-mode which-key markdown-mode ztree confluence circe ng2-mode doom-themes typescript-mode yapfify xah-find evil-vimish-fold origami format-all smtpmail-multi highlight notmuch gherkin-mode flycheck-pycheckers flycheck-pyflakes yaml-mode xclip web-mode web-beautify w3m unbound twittering-mode tide tern tango-2-theme swift3-mode sudo-ext smex smart-mode-line slack shackle scss-mode req-package python-mode pytest pylint pyfmt pyenv-mode-auto pushbullet popup-switcher pipenv ox-html5slide outline-magic org-toodledo org-ehtml org-alert notmuch-labeler nose mustache-mode mustache multi-web-mode multi-project mo-git-blame markdown-mode+ magit-annex lua-mode kotlin-mode jtags js3-mode jinja2-mode jedi jabber-otr itail ido-ubiquitous hydra http-post-simple help-fns+ helm-themes helm-swoop helm-recoll helm-project-persist helm-package helm-notmuch helm-git-grep helm-git helm-fuzzy-find helm-flycheck helm-dired-recent-dirs helm-cscope helm-cmd-t helm-chrome helm-ack haml-mode guide-key-tip groovy-mode gradle-mode google-this git-timemachine git-messenger flymake-cursor flycheck-color-mode-line findr find-file-in-project fill-column-indicator feature-mode evil-paredit evil-org evil-leader evil-goggles etags-table etags-select erlang eproject elscreen el-get egg edit-server dsvn dirtree direx dired-details dired+ diff-hl deft csharp-mode crosshairs creole calfw-gcal calfw buffer-move bookmark+ auth-password-store anything angular-mode ahg ag addressbook-bookmark column-marker ace-window adoc-mode origami rope-read-mode org-gcal srcery-theme load-file smart-mode-line fill-column-indicator notmuch password-store))
  '(paredit-mode nil t)
@@ -215,8 +216,8 @@
  '(req-package-log-level 'trace)
  '(request-backend 'url-retrieve)
  '(ring-bell-function 'ignore)
- '(ropemacs-confirm-saving nil t)
- '(ropemacs-global-prefix "C-x @" t)
+ '(ropemacs-confirm-saving nil)
+ '(ropemacs-global-prefix "C-x @")
  '(safe-local-variable-values
    '((eval when
            (and
@@ -234,6 +235,8 @@
  '(select-enable-primary nil)
  '(send-mail-function 'smtpmail-send-it)
  '(shell-file-name "/bin/sh")
+ '(smtpmail-smtp-server "localhost")
+ '(smtpmail-smtp-service 25)
  '(solarized-termcolors 256 t)
  '(split-height-threshold 200)
  '(split-width-threshold 155)
