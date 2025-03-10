@@ -233,6 +233,13 @@
         (progn (add-to-invisibility-spec '(org-link))
                (org-restart-font-lock)
                (setq org-descriptive-links t))))
+    (defun my-org-mode-setup ()
+  "Enable visual-line-mode when opening an Org buffer."
+    (visual-line-mode 1)) ;; Activate visual-line-mode
+
+    (add-hook 'org-mode-hook 'my-org-mode-setup)
+
+    )
   )
 ;; Local Variables:
 ;; byte-compile-warnings: (not free-vars)
