@@ -98,11 +98,12 @@
 (defun xclip-insert ()
   (interactive)
   (insert (shell-command-to-string
-      "xclip -o")))
+      "nohup xclip -o")))
 (defun xclip-copy (&optional b e)
   (interactive "r")
   (shell-command-on-region b e
-      "xclip -i"))
+      "nohup xclip -i > /dev/null 2>&1"))
+  ;"echo nowitworks | nohup xclip -selection clipboard ") 
 ;(setq org-agenda-include-diary t)
 ;(pop-to-buffer (get-buffer-create (generate-new-buffer-name "*scratch-org*")))
 ;(insert "Scratch buffer with org-mode.\n\n")
