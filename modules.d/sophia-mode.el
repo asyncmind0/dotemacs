@@ -28,7 +28,7 @@
       (let* (
             ;; define several category of keywords
             (x-keywords '("include" "stateful" "entrypoint" "default" "do" "else" "elif" "for" "if" "let" "switch" "function" "payable"))
-            (x-types '("record" "float" "int" "contract" "list" "rotation" "string" "vector" "hash"))
+            (x-types '("record" "float" "int" "contract" "list" "rotation" "string" "vector" "hash" "address" "map" "bool" "option"))
             (x-constants '("compiler" "AGENT" "ALL_SIDES" "ATTACH_BACK"))
             (x-events '("at_rot_target" "at_target" "attach" "public" "private"))
             (x-functions '("llAbs" "llAcos" "llAddToLandBanList" "llAddToLandPassList"))
@@ -50,7 +50,6 @@
           ;; in general, put longer words first
           )))
 
-configure number of space
 ;;;###autoload
 (define-derived-mode sophia-mode c-mode "sophia mode"
   "Major mode for editing Sophia Smart Contract Language)"
