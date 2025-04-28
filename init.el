@@ -327,8 +327,8 @@
  '(vline-visual ((t (:background "color-234")))))
 
 (require 'cl-lib)
-(load-file "~/.emacs.d.jagguli/emacs.el")
-(load-file "~/.emacs.d.jagguli/modules.el")
+(load-file "~/.emacs.d/emacs.el")
+(load-file "~/.emacs.d/modules.el")
 
 (defun org-clocking-buffer (&rest _))
 (defun rope-exiting-actions (&rest _))
