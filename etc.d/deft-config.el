@@ -1,1 +1,0 @@
-../etc-available/deft-config.el

@@ -1,94 +1,88 @@
-;;;; Support
-(req-package evil
+;;; evil-clip-config.el --- Evil-mode clipboard bypass operator bindings
+
+(use-package evil
+  :after (evil)  ;; Ensure evil is loaded
   :init
-  (progn
-    (defmacro without-evil-mode (&rest do-this)
-      ;; Check if evil-mode is on, and disable it temporarily
-      `(let ((evil-mode-is-on (evil-mode?)))
-         (if evil-mode-is-on
-             (disable-evil-mode))
-         (ignore-errors
-           ,@do-this)
-         (if evil-mode-is-on
-             (enable-evil-mode))))
+  ;; Utility macros to temporarily disable Evil
+  (defmacro evil-mode? ()
+    "Return the current evil state (non-nil if Evil is active)."
+    `evil-state)
 
-    (defmacro evil-mode? ()
-      "Checks if evil-mode is active. Uses Evil's state to check."
-      `evil-state)
+  (defmacro disable-evil-mode ()
+    "Temporarily disable Evil with message."
+    `(progn
+       (evil-mode 0)
+       (message "Evil mode disabled")))
 
-    (defmacro disable-evil-mode ()
-      "Disable evil-mode with visual cues."
-      `(progn
-         (evil-mode 0)
-         (message "Evil mode disabled")))
+  (defmacro enable-evil-mode ()
+    "Re-enable Evil with message."
+    `(progn
+       (evil-mode 1)
+       (message "Evil mode enabled")))
 
-    (defmacro enable-evil-mode ()
-      "Enable evil-mode with visual cues."
-      `(progn
-         (evil-mode 1)
-         (message "Evil mode enabled")))
+  (defmacro without-evil-mode (&rest body)
+    "Temporarily disable Evil to run BODY without Evil interference."
+    `(let ((evil-mode-was-on (evil-mode?)))
+       (when evil-mode-was-on (disable-evil-mode))
+       (ignore-errors ,@body)
+       (when evil-mode-was-on (enable-evil-mode))))
 
-                     ;;;; Clipboard bypass
+  ;; Clipboard-safe delete operators
+  (evil-define-operator evil-destroy-char (beg end type register yank-handler)
+    "Delete character without yanking to clipboard."
+    :motion evil-forward-char
+    (evil-delete-char beg end type ?_))
 
-    ;; delete: char
-    (evil-define-operator evil-destroy-char (beg end type register yank-handler)
-      :motion evil-forward-char
-      (evil-delete-char beg end type ?_))
+  (evil-define-operator evil-destroy-backward-char (beg end type register yank-handler)
+    "Delete backward character without yanking to clipboard."
+    :motion evil-forward-char
+    (evil-delete-backward-char beg end type ?_))
 
-    ;; delete: char (backwards)
-    (evil-define-operator evil-destroy-backward-char (beg end type register yank-handler)
-      :motion evil-forward-char
-      (evil-delete-backward-char beg end type ?_))
+  (evil-define-operator evil-destroy (beg end type register yank-handler)
+    "Delete text object without yanking."
+    (evil-delete beg end type ?_ yank-handler))
 
-    ;; delete: text object
-    (evil-define-operator evil-destroy (beg end type register yank-handler)
-      "Vim's 's' without clipboard."
-      (evil-delete beg end type ?_ yank-handler))
+  (evil-define-operator evil-destroy-line (beg end type register yank-handler)
+    "Delete to end of line without clipboard."
+    :motion nil
+    :keep-visual t
+    (interactive "<R><x>")
+    (evil-delete-line beg end type ?_ yank-handler))
 
-    ;; delete: to end of line
-    (evil-define-operator evil-destroy-line (beg end type register yank-handler)
-      :motion nil
-      :keep-visual t
-      (interactive "<R><x>")
-      (evil-delete-line beg end type ?_ yank-handler))
+  (evil-define-operator evil-destroy-whole-line (beg end type register yank-handler)
+    "Delete entire line without affecting clipboard."
+    :motion evil-line
+    (interactive "<R><x>")
+    (evil-delete-whole-line beg end type ?_ yank-handler))
 
-    ;; delete: whole line
-    (evil-define-operator evil-destroy-whole-line (beg end type register yank-handler)
-      :motion evil-line
-      (interactive "<R><x>")
-      (evil-delete-whole-line beg end type ?_ yank-handler))
+  (evil-define-operator evil-destroy-change (beg end type register yank-handler delete-func)
+    "Change text without yanking deleted content."
+    (evil-change beg end type ?_ yank-handler delete-func))
 
-    ;; change: text object
-    (evil-define-operator evil-destroy-change (beg end type register yank-handler delete-func)
-      (evil-change beg end type ?_ yank-handler delete-func))
+  ;; Smart paste functions that avoid evil interference
+  (defun evil-destroy-paste-before ()
+    "Paste before, bypassing clipboard."
+    (interactive)
+    (without-evil-mode
+     (delete-region (point) (mark))
+     (evil-paste-before 1)))
 
-    ;; paste: before
-    (defun evil-destroy-paste-before ()
-      (interactive)
-      (without-evil-mode
-       (delete-region (point) (mark))
-       (evil-paste-before 1)))
+  (defun evil-destroy-paste-after ()
+    "Paste after, bypassing clipboard."
+    (interactive)
+    (without-evil-mode
+     (delete-region (point) (mark))
+     (evil-paste-after 1)))
 
-    ;; paste: after
-    (defun evil-destroy-paste-after ()
-      (interactive)
-      (without-evil-mode
-       (delete-region (point) (mark))
-       (evil-paste-after 1)))
+  (evil-define-operator evil-destroy-replace (beg end type register yank-handler)
+    "Replace with yank buffer, without copying deleted region."
+    (evil-destroy beg end type register yank-handler)
+    (evil-paste-before 1 register))
 
-    ;; paste: text object
-    (evil-define-operator evil-destroy-replace (beg end type register yank-handler)
-      (evil-destroy beg end type register yank-handler)
-      (evil-paste-before 1 register))
-
-    ;; Clipboard bypass key rebindings
-    (define-key evil-normal-state-map "s" 'evil-destroy)
-    (define-key evil-normal-state-map "S" 'evil-destroy-line)
-    (define-key evil-normal-state-map "c" 'evil-destroy-change)
-    (define-key evil-normal-state-map "x" 'evil-destroy-char)
-    (define-key evil-normal-state-map "X" 'evil-destroy-whole-line)
-    (define-key evil-normal-state-map "Y" 'evil-copy-to-end-of-line)
-    (define-key evil-visual-state-map "P" 'evil-destroy-paste-before)
-    (define-key evil-visual-state-map "p" 'evil-destroy-paste-after)
-    )
-  )
+  ;; Rebind default operators in Evil normal mode
+  :config
+  (define-key evil-normal-state-map (kbd "s") 'evil-destroy)
+  (define-key evil-normal-state-map (kbd "S") 'evil-destroy-line)
+  (define-key evil-normal-state-map (kbd "c") 'evil-destroy-change)
+  (define-key evil-normal-state-map (kbd "x") 'evil-destroy-char)
+  (define-key evil-normal-state-map (kbd "X") 'evil-destroy-whole-line))

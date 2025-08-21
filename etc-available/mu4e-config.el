@@ -1,10 +1,10 @@
 (defun email () 
   (interactive)
   (when (not (featurep 'mu4e))
-    (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e/")
+    (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e/")
     
     (require 'mu4e)
-    (require 'org-mu4e)
+    ;;(require 'org-mu4e)
     (require 'password-store)
     ;; sending mail -- replace USERNAME with your gmail username
     ;; also, make sure the gnutls command line utils are installed
@@ -12,87 +12,60 @@
     (require 'smtpmail)
     ;; these are actually the defaults
     ;; convert org mode to HTML automatically
-    (setq 
-     org-mu4e-convert-to-html nil
-     ;; need this to convert some e-mails properly
-     mu4e-html2text-command "html2text -utf8 -width 72"
-     user-full-name  "Steven Joseph"
-     message-signature nil
-     ;; don't keep message buffers around
-     message-kill-buffer-on-exit t
-     
-     ;; show images
-     mu4e-show-images t
-     ;; allow for updating mail using 'U' in the main view:
-     ;; I have this running in the background anyway
-     ;; (setq mu4e-get-mail-command "offlineimap")
-     ;; convert org mode to HTML automatically
-     org-mu4e-convert-to-html t
-    
-     ;; need this to convert some e-mails properly
-     ;; (setq mu4e-html2text-command "html2text -utf8 -width 72")
-     mu4e-html2text-command "html2text "
-     mu4e-sent-folder   "/Sent"       ;; folder for sent messages
-     mu4e-drafts-folder "/Drafts"     ;; unfinished messages
-     mu4e-trash-folder  "/Trash"      ;; trashed messages
-     mu4e-refile-folder "/Archive"   ;; saved messages
-     )
+    ;;(setq 
+    ;; org-mu4e-convert-to-html nil
+    ;; ;; need this to convert some e-mails properly
+    ;; mu4e-html2text-command "html2text -utf8 -width 72"
+    ;; user-full-name  "Steven Joseph"
+    ;; message-signature nil
+    ;; ;; don't keep message buffers around
+    ;; message-kill-buffer-on-exit t
+    ;; 
+    ;; ;; show images
+    ;; mu4e-show-images t
+    ;; ;; allow for updating mail using 'U' in the main view:
+    ;; ;; I have this running in the background anyway
+    ;; ;; (setq mu4e-get-mail-command "offlineimap")
+    ;; ;; convert org mode to HTML automatically
+    ;; org-mu4e-convert-to-html t
+    ;;
+    ;; ;; need this to convert some e-mails properly
+    ;; ;; (setq mu4e-html2text-command "html2text -utf8 -width 72")
+    ;; mu4e-html2text-command "html2text "
+    ;; mu4e-sent-folder   "/Sent"       ;; folder for sent messages
+    ;; mu4e-drafts-folder "/Drafts"     ;; unfinished messages
+    ;; mu4e-trash-folder  "/Trash"      ;; trashed messages
+    ;; mu4e-refile-folder "/Archive"   ;; saved messages
+    ;; )
 
-    (setq mu4e-refile-folder
-          (lambda (msg)
-            (cond
-             ;; messages with football or soccer in the subject go to /football
-             ((string-match "football\\|soccer"
-                            (mu4e-message-field msg :subject))
-              "/football")
-             ;; messages sent by me go to the sent folder
-             ((find-if
-               (lambda (addr)
-                 (mu4e-message-contact-field-matches msg :from addr))
-               mu4e-user-mail-address-list)
-              mu4e-sent-folder)
-             ;; everything else goes to /archive
-             ;; important to have a catch-all at the end!
-             (t  "/inbox"))))
-    
+    ;;(setq mu4e-refile-folder
+    ;;      (lambda (msg)
+    ;;        (cond
+    ;;         ;; messages with football or soccer in the subject go to /football
+    ;;         ((string-match "football\\|soccer"
+    ;;                        (mu4e-message-field msg :subject))
+    ;;          "/football")
+    ;;         ;; messages sent by me go to the sent folder
+    ;;         ((find-if
+    ;;           (lambda (addr)
+    ;;             (mu4e-message-contact-field-matches msg :from addr))
+    ;;           mu4e-user-mail-address-list)
+    ;;          mu4e-sent-folder)
+    ;;         ;; everything else goes to /archive
+    ;;         ;; important to have a catch-all at the end!
+    ;;         (t  "/inbox"))))
+    ;;
 
     ;; something about ourselves
-    (if (string-match "^.*.iress.com.au" system-name )
-        (progn
-          (setq
-           user-mail-address (password-store-get "iress/user")
-           ;;message-send-mail-function 'smtpmail-send-it
-           message-send-mail-function 'message-send-mail-with-iress-sendmail
-           ;;smtpmail-stream-type 'plain
-           ;;smtpmail-default-smtp-server "localhost"
-           ;;smtpmail-smtp-server "localhost"
-           ;;smtpmail-smtp-service 1025
-           ;;mu4e-maildir       "~/.local/share/local-mail"   ;; top-level Maildir
-           mu4e-maildir       "~/mail/iress-local"   ;; top-level Maildir
-           ;;mu4e-maildir       "/home/steven/.local/share/.local-mail.directory"   ;; top-level Maildir
-           ;; don't save message to Sent Messages, Gmail/IMAP takes care of this
-           ;;mu4e-sent-messages-behavior 'delete
-           mu4e-maildir-shortcuts '( ("/INBOX" . ?i)
-                                     ("/manup" . ?u)
-                                     ("/me" . ?m)
-                                     ;; ("/gmail/[Gmail].Sent Mail"   . ?s)
-                                     ;; ("/gmail/[Gmail].Trash"       . ?t)
-                                     ("/osc" . ?o))
-           ))
-      (progn
         (setq
-         mu4e-maildir       "~/mail"   ;; top-level Maildir
-         user-mail-address "steven@stevenjoseph.in"
-         user-full-name  "steven@stevenjoseph.in"
+         mu4e-maildir       "~/Maildir"   ;; top-level Maildir
+         user-mail-address "steven@damagebdd.com"
+         user-full-name  "Steven Joseph"
            ;; don't save message to Sent Messages, Gmail/IMAP takes care of this
          mu4e-sent-messages-behavior 'delete
-         mu4e-maildir-shortcuts '( ("melit/Inbox" . ?i)
-                                   ("/melit/[Gmail]/Important"   . ?I)
-                                   ("/me" . ?m)
-                                   ("/melit/[Gmail]/Sent Mail"   . ?s)
-                                   ("/melit/[Gmail]/Trash"       . ?t)
+         mu4e-maildir-shortcuts '( ("Inbox" . ?i)
                                    )
-         )))
+         )
   
   
     ;; use imagemagick, if available
@@ -131,6 +104,35 @@
   (mu4e))
 
 (defalias 'org-mail 'org-mu4e-compose-org-mode)
+
+;; Configure desktop notifs for incoming emails:
+(use-package mu4e-alert
+  :ensure t
+  :init
+  (defun perso--mu4e-notif ()
+    "Display both mode line and desktop alerts for incoming new emails."
+    (interactive)
+    (mu4e-update-mail-and-index 1)        ; getting new emails is ran in the background
+    (mu4e-alert-enable-mode-line-display) ; display new emails in mode-line
+    (mu4e-alert-enable-notifications))    ; enable desktop notifications for new emails
+  (defun perso--mu4e-refresh ()
+    "Refresh emails every 300 seconds and display desktop alerts."
+    (interactive)
+    (mu4e t)                            ; start silently mu4e (mandatory for mu>=1.3.8)
+    (run-with-timer 0 300 'perso--mu4e-notif))
+  :after mu4e
+  :bind ("<f2>" . perso--mu4e-refresh)  ; F2 turns Emacs into a mail client
+  :config
+  ;; Mode line alerts:
+  (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display)
+  ;; Desktop alerts:
+  (mu4e-alert-set-default-style 'libnotify)
+  (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)
+  ;; Only notify for "interesting" (non-trashed) new emails:
+  (setq mu4e-alert-interesting-mail-query
+        (concat
+         "flag:unread maildir:/INBOX"
+         " AND NOT flag:trashed")))
 
 ;;(defadvice epg--start (around advice-epg-disable-agent disable)
 ;;  "Make epg--start not able to find a gpg-agent"

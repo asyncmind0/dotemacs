@@ -1,40 +1,33 @@
-(req-package windmove
+;;; windows-config.el --- Custom window management configuration
+
+(use-package windmove
+  :ensure t
   :init
-  (progn
-    (windmove-default-keybindings 'control)
-    ;;(setq default-frame-alist
-    ;;      '(
-    ;;        (width . 100) ; character
-    ;;        (height . 52) ; lines
-    ;;        (foreground-color . blue)
-    ;;                ))
-    ;; Reverse colors for the border to have nicer line
-    (set-face-inverse-video-p 'vertical-border nil)
-    (set-face-background 'vertical-border (face-background 'default))
+  ;; Enable directional window movement using Ctrl + arrow keys
+  (windmove-default-keybindings 'control)
 
-    ;; Set symbol for the border
-    ;; http://stackoverflow.com/questions/18210631/how-to-change-the-character-composing-the-emacs-vertical-border
-    (set-display-table-slot standard-display-table
-                            'vertical-border
-                                                    (make-glyph-code ?│))
+  ;; Customize vertical window border appearance
+  (set-face-inverse-video-p 'vertical-border nil)
+  (set-face-background 'vertical-border (face-background 'default))
+  (set-display-table-slot standard-display-table
+                          'vertical-border
+                          (make-glyph-code ?│))
 
+  ;; Custom split behavior: auto switch to previous buffer
+  (defun sacha/vsplit-last-buffer (prefix)
+    "Split window vertically and switch to previous buffer."
+    (interactive "P")
+    (split-window-vertically)
+    (other-window 1)
+    (unless prefix (switch-to-next-buffer)))
 
-    ;;http://pages.sachachua.com/.emacs.d/Sacha.html#sec-1-5-5
-    (defun sacha/vsplit-last-buffer (prefix)
-      "Split the window vertically and display the previous buffer."
-      (interactive "p")
-      (split-window-vertically)
-      (other-window 1 nil)
-      (unless prefix
-        (switch-to-next-buffer)))
-    (defun sacha/hsplit-last-buffer (prefix)
-      "Split the window horizontally and display the previous buffer."
-      (interactive "p")
-      (split-window-horizontally)
-      (other-window 1 nil)
-      (unless prefix (switch-to-next-buffer)))
-    (bind-key "C-x 2" 'sacha/vsplit-last-buffer)
-    (bind-key "C-x 3" 'sacha/hsplit-last-buffer)
+  (defun sacha/hsplit-last-buffer (prefix)
+    "Split window horizontally and switch to previous buffer."
+    (interactive "P")
+    (split-window-horizontally)
+    (other-window 1)
+    (unless prefix (switch-to-next-buffer)))
 
-    )
-  )
+  ;; Override default split bindings with custom ones
+  :bind (("C-x 2" . sacha/vsplit-last-buffer)
+         ("C-x 3" . sacha/hsplit-last-buffer)))

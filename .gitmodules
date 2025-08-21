@@ -19,15 +19,9 @@
 [submodule "modules.d/itail"]
 	path = modules.d/itail
 	url = https://github.com/re5et/itail.git
-[submodule "modules.d/helm-cmd-t"]
-	path = modules.d/helm-cmd-t
-	url = https://github.com/emacs-helm/helm-cmd-t.git
 [submodule "modules.d/buffer-timer"]
 	path = modlules.d/buffer-timer
 	url = https://github.com/hardaker/elisp-buffer-timer.git
-[submodule "modules.d/Memacs"]
-	path = modules.d/Memacs
-	url = https://github.com/novoid/Memacs.git
 [submodule "modules.d/Pymacs"]
 	path = modules.d/Pymacs
 	url = https://github.com/jagguli/Pymacs.git

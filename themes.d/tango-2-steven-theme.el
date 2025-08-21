@@ -4,7 +4,7 @@
 (custom-theme-set-faces
  'tango-2-steven
  '(cursor ((t (:foreground "#2F4F4F"))))
- '(region ((t (:background "color-235"))))
+ '(region ((t (:background "#666"))))
  '(highlight ((t (:background "#222222"))))
  '(mode-line ((t (:foreground "#BCBf91" :background "#003d00"))))
  '(mode-line-inactive ((t (:background "#111111" :foreground "#cccddd"))))
@@ -42,6 +42,13 @@
  '(show-paren-match ((t (:background "#729fcf" :foreground "#eeeeec"))))
  '(show-paren-mismatch ((t (:background "#ad7fa8" :foreground "#2e3436"))))
  '(vertical-border ((t (:inherit mode-line-inactive :background "black" :foreground "grey" :weight thin :width condensed))))
- '(default ((t (:background "black" :foreground "#eeeeec")))))
+ '(default ((t (:background "black" :foreground "#eeeeec"))))
+ '(helm-ff-directory ((t (:background "color-18" :foreground "white"))))
+'(helm-selection ((t (:background "#222222" :foreground "color-226" :weight extra-bold))))
+;; ;;'(helm-ff-directory ((t (:background "color-18" :foreground "white"))))
+;; ;;'(helm-selection ((t (:background "color-232" :foreground "color-226" :weight extra-bold))))
+;; ;;'(helm-source-header ((t (:background "color-18" :foreground "black" :weight bold :height 1.3 :family "Sans Serif"))))
+;; ;;'(helm-visible-mark ((t (:background "color-17"))))
+ )
 
 (provide-theme 'tango-2-steven)

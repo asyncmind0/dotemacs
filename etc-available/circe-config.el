@@ -1,90 +1,65 @@
-(req-package circe
-  :require (
-            password-store
-            )
-  :config
-  (setq
-   circe-reduce-lurker-spam t
-   lui-time-stamp-position 'right-margin
-   lui-time-stamp-format "%H:%M-%d"
-   lui-flyspell-p nil
-   lui-track-bar-behavior 'before-switch-to-buffer
-   circe-format-say "{nick:s}: {body}"
-   circe-server-max-reconnect-attempts 1000
-   lui-flyspell-alist '(
-                        ("#hamburg" "german8")
-                        (".*" "american")
-                        )
-   circe-network-options
-   `(
-     ("Freenode"
-      :tls t
-      :nick ,(password-store-get "irc/freenode/username")
-      :password ,(password-store-get "irc/freenode/password")
-      :sasl-username ,(password-store-get "irc/freenode/username")
-      :sasl-password ,(password-store-get "irc/freenode/password")
-      :channels (
-                 "#emacs-circe"
-                 "#emacs"
-                 "#salt"
-                 "#riak"
-                 "#python"
-                 "#notmuch"
-                 )
-      )
-     ("OFTC"
-      :tls t
-      :nick ,(password-store-get "irc/oftc/username")
-      :password ,(password-store-get "irc/oftc/password")
-      :sasl-username ,(password-store-get "irc/oftc/username")
-      :sasl-password ,(password-store-get "irc/oftc/password")
-      :channels (
-                 "#qtile"
-                 )
-      )
-     )
-   )
-  :init
-  (progn
-    ;;(defun circe-network-connected-p (network)
-    ;;  "Return non-nil if there's any Circe server-buffer whose
-    ;;    `circe-server-netwok' is NETWORK."
-    ;;  (catch 'return
-    ;;    (dolist (buffer (circe-server-buffers))
-    ;;      (with-current-buffer buffer
-    ;;        (if (string= network circe-server-network)
-    ;;            (throw 'return t))))))
+;;; circe-config.el --- CoCD Circe Configuration (use-package based)
 
-    ;;(defun circe-maybe-connect (network)
-    ;;  "Connect to NETWORK, but ask user for confirmation if it's
-    ;;    already been connected to."
-    ;;  (interactive "sNetwork: ")
-    ;;  (if (or (not (circe-network-connected-p network))
-    ;;          (y-or-n-p (format "Already connected to %s, reconnect?" network)))
-    ;;      (circe network)))
-    ;;(defun irc ()
-    ;;  "Connect to IRC"
-    ;;  (interactive)
-    ;;  (circe-maybe-connect "Freenode")
-    ;;  ;;(circe "Bitlbee")
-    ;;  ;;(circe "IRCnet")
-    ;;  )
-    (load "lui-logging" nil t)
-    (enable-lui-logging-globally)
-    (enable-circe-color-nicks)
-    (add-hook 'lui-mode-hook 'my-circe-set-margin)
-    (defun my-circe-set-margin ()
-      (setq right-margin-width 5))
-    (circe-set-display-handler "JOIN" (lambda (&rest ignored) nil))
-    (circe-set-display-handler "QUIT" (lambda (&rest ignored) nil))
-    (enable-lui-track-bar)
-    (circe-lagmon-mode)
-    (add-hook 'circe-chat-mode-hook 'my-circe-prompt)
-    (defun my-circe-prompt ()
-      (lui-set-prompt
-       (concat (propertize (concat (buffer-name) ">")
-                           'face 'circe-prompt-face)
-               " ")))
-    (message "circe-config loaded")
-  )
-)
+;;; Commentary:
+;; Real-time verified IRC presence for the Church of Christ Denied.
+;; This configuration uses use-package for modular loading and evil-mode integration.
+
+;;; Code:
+
+(use-package circe
+  :defer t
+  :init
+  (setq circe-network-options
+        '(("Libera"
+           :nick "cocd-verifier"
+           :user "cocd"
+           :realname "CoCD Verification Daemon"
+           :host "irc.libera.chat"
+           :port 6697
+           :use-tls t
+           :channels ("#churchofchristdenied" "#emacs"))))
+  (setq circe-default-part-message "Blessed be the crater.")
+  (setq circe-default-quit-message "Verification complete. Denial eternal.")
+  :hook ((circe-channel-mode . lui-logging-mode)
+         (circe-channel-mode . cocd-circe-scroll-settings))
+  :config
+  (setq circe-format-say "<%n> %m")
+  (setq circe-format-self-say "<%n*> %m")
+
+  ;; Evil bindings for IRC-denial operations
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal circe-mode-map
+      (kbd "RET") #'lui-send-input
+      (kbd "C-c C-l") #'lui-erase-buffer
+      (kbd "C-c C-s") #'circe-command-Say
+      (kbd "C-c C-q") #'circe-command-QUIT
+      (kbd "C-c C-j") #'circe-command-JOIN
+      (kbd "C-c C-p") #'circe-command-PART
+      (kbd "C-c C-n") #'next-line
+      (kbd "C-c C-p") #'previous-line
+      (kbd "C-c C-b") #'switch-to-buffer)))
+
+(use-package lui
+  :defer t
+  :config
+  ;; Timestamps on the right
+  (setq lui-time-stamp-position 'right-margin
+        lui-time-stamp-format "[%H:%M:%S] ")
+  ;; Logging format and directory
+  (setq lui-logging-directory "~/.emacs.d/circe-logs/"
+        lui-logging-format "[%Y-%m-%d %H:%M:%S] %n: %m\n"))
+
+(defun cocd-circe-scroll-settings ()
+  "Ensure new messages don't force scroll jumps."
+  (setq-local scroll-conservatively 10000)
+  (setq-local scroll-margin 0))
+
+;; Optional: Desktop notifications
+(use-package circe-notifications
+  :after circe
+  :config
+  (enable-circe-notifications))
+
+(provide 'circe-config)
+
+;;; circe-config.el ends here
