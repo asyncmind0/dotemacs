@@ -663,6 +663,11 @@
   :init
   (setq chatgpt-shell-openai-key
         (password-store-get "emacs/openai-api-key")))
+;=======
+(require 'cl-lib)
+(load-file "~/.emacs.d/emacs.el")
+(load-file "~/.emacs.d/modules.el")
+;>>>>>>> 113afc538b4ccc3dd7df33b7cd42b271f916503a
 
 ;; Enable which-key for command discovery
 (use-package which-key
