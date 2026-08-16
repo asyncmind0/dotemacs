@@ -7,3 +7,7 @@ url/*
 *.elc
 .history.d/*
 straight/*
+.cache/*
+cache/*
+ellama-sessions/*
+eln-cache/*
