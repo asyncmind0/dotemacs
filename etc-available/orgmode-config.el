@@ -145,3 +145,5 @@ Each entry is a cons cell: (\"UID <email> [KEYID]\" . KEYID)."
       (cocd-log-message (format "Created signature: %s" sigfile)))))
 
 (add-hook 'org-publish-after-publishing-hook #'my-sign-published-file)
+
+(add-hook 'org-mode-hook #'visual-line-mode)
