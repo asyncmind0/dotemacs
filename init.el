@@ -58,7 +58,7 @@
          M         M M  M M     .dMMM MM        .M
          MMMMMMMMMMM MMMM MMMMMMMMMMM MMMMMMMMMMMM
 
-           http://github.com/jagguli/dotemacs
+           https://github.com/asyncmind0/dotemacs
 
 - The first step to being your master, is mastering your self.
 
@@ -571,6 +571,7 @@
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.sls\\'" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.wiki\\'" . mediawiki-mode))
+(add-to-list 'auto-mode-alist '("\\.aes\\'" . sophia-mode))
 
 ;; Load preferred theme
 (load-theme 'tango-2-steven t)
@@ -591,6 +592,8 @@
 (use-package hl-line+
   :load-path "modules.d"
   :commands global-hl-line-mode)
+(use-package sophia-mode
+  :load-path "modules.d")
 
 ;; Optional modules (uncomment as needed)
 ;; (use-package notmuch-pick :load-path "modules.d")
@@ -662,11 +665,13 @@
   :ensure t
   :init
   (setq chatgpt-shell-openai-key
-        (password-store-get "emacs/openai-api-key")))
+        (password-store-get "emacs/openai-api-key")
+        chatgpt-model "gpt-5.5"
+        ))
 ;=======
 (require 'cl-lib)
-(load-file "~/.emacs.d/emacs.el")
-(load-file "~/.emacs.d/modules.el")
+;(load-file "~/.emacs.d/emacs.el")
+;(load-file "~/.emacs.d/modules.el")
 ;>>>>>>> 113afc538b4ccc3dd7df33b7cd42b271f916503a
 
 ;; Enable which-key for command discovery
@@ -696,3 +701,14 @@
 (use-package consult
   :ensure t
   :bind (("C-c f" . consult-fd))) ;; Or any key you prefer
+
+(use-package flycheck
+  :diminish flycheck-mode
+  :config
+  (add-hook 'after-init-hook 'global-flycheck-mode)
+  (setq flycheck-display-errors-function nil
+        flycheck-erlang-include-path '("../include")
+        flycheck-erlang-library-path '()
+        flycheck-check-syntax-automatically '(save)))
+
+
